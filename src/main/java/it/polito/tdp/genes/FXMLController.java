@@ -5,6 +5,7 @@
 package it.polito.tdp.genes;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.genes.model.Model;
@@ -38,12 +39,49 @@ public class FXMLController {
 
     @FXML
     void doContaArchi(ActionEvent event) {
-
+    	txtResult.clear();
+    	this.model.creaGrafo();
+    	txtResult.setText("Grafo creato: "+this.model.getNVertici()+" vertici e "+this.model.getNumArchi()+" archi.\n");
+    	txtResult.appendText("Peso minimo= "+this.model.getPesoMinimo());
+    	txtResult.appendText("\nPeso massimo= "+this.model.getPesoMassimo());
+    	
+    	double soglia;
+    	try {
+    		soglia=Double.parseDouble(txtSoglia.getText());
+    		if(soglia<this.model.getPesoMinimo() || soglia>this.model.getPesoMassimo()) {
+    			txtResult.setText("Inserire un valore tra: "+this.model.getPesoMinimo()+" e "+this.model.getPesoMassimo());
+    			return;
+    		}
+    	}catch(NumberFormatException e) {
+    		txtResult.setText("Inserire un valore numerico.");
+    		return;
+    	}
+    	
+    	String res= this.model.getMaggioriMinori(soglia);
+    	txtResult.appendText("\n"+res);
     }
+    
 
     @FXML
     void doRicerca(ActionEvent event) {
-
+    	txtResult.clear();
+    	double soglia;
+    	try {
+    		soglia=Double.parseDouble(txtSoglia.getText());
+    		if(soglia<this.model.getPesoMinimo() || soglia>this.model.getPesoMassimo()) {
+    			txtResult.setText("Inserire un valore tra: "+this.model.getPesoMinimo()+" e "+this.model.getPesoMassimo());
+    			return;
+    		}
+    	}catch(NumberFormatException e) {
+    		txtResult.setText("Inserire un valore numerico.");
+    		return;
+    	}
+    	
+    	List<Integer> percorso=this.model.calcolaPercorso(soglia);
+    	txtResult.setText("Il percorso trovato è lungo :"+ this.model.getLunghezza());
+    	for(Integer i: percorso) {
+    		txtResult.appendText("\n"+ i);
+    	}
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
