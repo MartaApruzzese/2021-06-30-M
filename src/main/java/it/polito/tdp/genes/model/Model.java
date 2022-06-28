@@ -96,6 +96,7 @@ public class Model {
 			for(int c2: this.vertici) {
 				if(c1!=c2) {
 					
+					
 					double peso= 0.0;
 							//this.dao.getPesoArco(c1, c2);
 					for(double d: this.dao.getPesoArco(c1, c2)) {
